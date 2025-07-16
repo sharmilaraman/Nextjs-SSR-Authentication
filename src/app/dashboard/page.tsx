@@ -2,7 +2,7 @@
 import LogoutButton from "../login/LogoutButton";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
+import { BookOpen } from "lucide-react";
 // 1. Define the type
 type DashboardStats = {
   learner_count: number;
@@ -67,16 +67,7 @@ const cardData = (stats: DashboardStats) => [
     value: stats.course_count,
     color: "green",
     icon: (
-      <svg
-        className="w-8 h-8 text-green-500"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-      </svg>
+      <BookOpen className="w-8 h-8 text-green-500" />
     ),
     bg: "bg-green-100",
   },
@@ -117,7 +108,7 @@ export default async function DashboardPage() {
             </div>
             <div className="flex items-center space-x-4">
               {name && (
-                <span className="text-black font-medium">{name}</span>
+                <span className="text-black text-[20px] font-semibold">Admin: {name}</span>
               )}
               <LogoutButton />
             </div>

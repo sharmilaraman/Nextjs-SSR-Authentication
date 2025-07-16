@@ -11,7 +11,7 @@ export default async function HomePage() {
 
   return (
     <div>
-     
+     Welcome to my Next js App using SSR Authentication 
     </div>
   );
 }

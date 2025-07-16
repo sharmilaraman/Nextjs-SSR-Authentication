@@ -2,6 +2,7 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { Eye, EyeOff } from "lucide-react";
 
 type LoginForm = {
   phone: string;
@@ -14,6 +15,8 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [path, setPath] = useState("e-learning");
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<Element>) => {
@@ -31,7 +34,7 @@ export default function LoginPage() {
     const data = await res.json();
     if (data.status) {
       Cookies.set("token", data.data.token, { path: "/" }); 
-      Cookies.set("name", data.data.name, { path: "/" }); // <-- Add this line
+      Cookies.set("name", data.data.name, { path: "/" }); 
       console.log("Navigating to dashboard.");
       console.log("Name", data.data.name);
       console.log("Token", data.data.token);
@@ -69,24 +72,32 @@ export default function LoginPage() {
                 className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md "
               />
             </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Password:
-              </label>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md pr-10"
-              />
-            </div>
+            <div className="relative">
+  <label
+    htmlFor="password"
+    className="block text-sm font-medium text-gray-700 mb-2"
+  >
+    Password:
+  </label>
+  <input
+    id="password"
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Enter your password"
+    required
+    value={password}
+    onChange={e => setPassword(e.target.value)}
+    className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md pr-10"
+  />
+  <div
+    className="absolute top-11 right-3 cursor-pointer text-gray-500"
+    onClick={() => setShowPassword(!showPassword)}
+  >
+    {showPassword ? <Eye size={20} /> : <EyeOff
+     size={20} />}
+  </div>
+</div>
+
             
           </div>
 
