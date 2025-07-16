@@ -1,12 +1,17 @@
-import { getCurrentUser } from './actions/auth';
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function HomePage() {
-  const user = await getCurrentUser();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token");
 
-  if (user) {
-    redirect('/dashboard');
-  } else {
-    redirect('/login');
+  if (!token) {
+    redirect("/login");
   }
+
+  return (
+    <div>
+     
+    </div>
+  );
 }

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js SSR Auth App",
+  title: "Next Auth App",
   description: "Server-side rendered authentication with Next.js",
 };
 
