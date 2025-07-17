@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { BookOpen } from "lucide-react";
 
-
 type DashboardStats = {
   learner_count: number;
   course_count: number;
@@ -19,9 +18,8 @@ async function getDashboardStats(): Promise<DashboardStats> {
     redirect("/login");
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const res = await fetch(
-    `${baseUrl}dashboard/admin-dashboard`,
+    "https://api2-tejasvita-elearning.underdev.in/api/dashboard/admin-dashboard",
     {
       method: "GET",
       headers: {
@@ -37,7 +35,7 @@ async function getDashboardStats(): Promise<DashboardStats> {
   if (!data.status) {
     redirect("/login");
   }
-  return data.data as DashboardStats;
+  return data.data as DashboardStats; // 2. Use the type here
 }
 
 // 3. Use the type in cardData
@@ -92,7 +90,15 @@ const cardData = (stats: DashboardStats) => [
     ),
     bg: "bg-orange-100",
   },
- 
+  {
+    title: "Courses",
+    value: stats.course_count,
+    color: "green",
+    icon: (
+      <BookOpen className="w-8 h-8 text-green-500" />
+    ),
+    bg: "bg-green-100",
+  },
   
 ];
 
@@ -105,14 +111,14 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm">
-        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex gap-1 justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+              <h1 className="text-sm md:text-xl font-semibold text-gray-900">Dashboard</h1>
             </div>
             <div className="flex items-center space-x-2">
               {name && (
-                <span className="text-black text-[14px] md:text-md font-semibold">Admin: {name}</span>
+                <span className="text-black text-sm md:text-xl font-semibold">Admin: {name}</span>
               )}
               <LogoutButton />
             </div>
@@ -120,7 +126,7 @@ export default async function DashboardPage() {
         </div>
       </nav>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {cardData(stats).map((card) => (
             <div
               key={card.title}
