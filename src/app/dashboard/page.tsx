@@ -3,7 +3,8 @@ import LogoutButton from "../login/LogoutButton";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { BookOpen } from "lucide-react";
-// 1. Define the type
+
+
 type DashboardStats = {
   learner_count: number;
   course_count: number;
@@ -18,8 +19,9 @@ async function getDashboardStats(): Promise<DashboardStats> {
     redirect("/login");
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const res = await fetch(
-    "https://api2-tejasvita-elearning.underdev.in/api/dashboard/admin-dashboard",
+    `${baseUrl}dashboard/admin-dashboard`,
     {
       method: "GET",
       headers: {
@@ -35,7 +37,7 @@ async function getDashboardStats(): Promise<DashboardStats> {
   if (!data.status) {
     redirect("/login");
   }
-  return data.data as DashboardStats; // 2. Use the type here
+  return data.data as DashboardStats;
 }
 
 // 3. Use the type in cardData
@@ -90,6 +92,8 @@ const cardData = (stats: DashboardStats) => [
     ),
     bg: "bg-orange-100",
   },
+ 
+  
 ];
 
 export default async function DashboardPage() {
@@ -101,14 +105,14 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-1 justify-between h-16">
             <div className="flex items-center">
               <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
               {name && (
-                <span className="text-black text-[20px] font-semibold">Admin: {name}</span>
+                <span className="text-black text-[14px] md:text-md font-semibold">Admin: {name}</span>
               )}
               <LogoutButton />
             </div>
