@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 export async function POST(request: NextRequest) {
      const { phone,password,path,name } = await request.json();
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
      const token = data.data.token || "some-token";
      const res = NextResponse.json({ success: true });
      res.cookies.set("token", token, { httpOnly: true, path: "/", maxAge: 60 * 60 });
+     res.cookies.set("name", name, { httpOnly: true, path: "/", maxAge: 60 * 60 });
      return res;
    } else {
      return NextResponse.json({ success: false, message: data.message || "Login failed" }, { status: 401 });

@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { Eye, EyeOff } from "lucide-react";
+import Toast from "@/components/toast";
 
 type LoginForm = {
   phone: string;
@@ -16,6 +17,9 @@ export default function LoginPage() {
   const [path, setPath] = useState("e-learning");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [toastType, setToastType] = useState<"success" | "error">("success");
+  const [isToastVisible, setIsToastVisible] = useState(false);
 
   const router = useRouter();
 
@@ -23,7 +27,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL + "auth/login";
-    
+
     const formData: LoginForm = { phone, password, path };
 
     const res = await fetch(apiUrl, {
@@ -33,14 +37,19 @@ export default function LoginPage() {
     });
     const data = await res.json();
     if (data.status) {
-      Cookies.set("token", data.data.token, { path: "/" }); 
-      Cookies.set("name", data.data.name, { path: "/" }); 
-      console.log("Navigating to dashboard.");
-      console.log("Name", data.data.name);
-      console.log("Token", data.data.token);
-      router.push("/dashboard");
+      Cookies.set("token", data.data.token, { path: "/" });
+      Cookies.set("name", data.data.name, { path: "/" });
+      setToastMessage(data.message || "Login successful!");
+      setToastType("success");
+      setIsToastVisible(true);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 1500);
     } else {
       setError(data.message || "Login failed");
+      setToastMessage(data.message || "Login failed. Invalid credentials.");
+      setToastType("error");
+      setIsToastVisible(true);
     }
   };
 
@@ -68,37 +77,34 @@ export default function LoginPage() {
                 placeholder="Enter your phone number"
                 required
                 value={phone}
-                onChange={e => setPhone(e.target.value)}
+                onChange={(e) => setPhone(e.target.value)}
                 className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md "
               />
             </div>
             <div className="relative">
-  <label
-    htmlFor="password"
-    className="block text-sm font-medium text-gray-700 mb-2"
-  >
-    Password:
-  </label>
-  <input
-    id="password"
-    type={showPassword ? "text" : "password"}
-    name="password"
-    placeholder="Enter your password"
-    required
-    value={password}
-    onChange={e => setPassword(e.target.value)}
-    className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md pr-10"
-  />
-  <div
-    className="absolute top-11 right-3 cursor-pointer text-gray-500"
-    onClick={() => setShowPassword(!showPassword)}
-  >
-    {showPassword ? <Eye size={20} /> : <EyeOff
-     size={20} />}
-  </div>
-</div>
-
-            
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Password:
+              </label>
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Enter your password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="appearance-none relative block w-full h-12 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md pr-10"
+              />
+              <div
+                className="absolute top-11 right-3 cursor-pointer text-gray-500"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
+              </div>
+            </div>
           </div>
 
           {error && <div className="text-red-600 text-center">{error}</div>}
@@ -119,6 +125,13 @@ export default function LoginPage() {
           </div>
         </form>
       </div>
+      {isToastVisible && (
+        <Toast
+          message={toastMessage}
+          type={toastType}
+          onClose={() => setIsToastVisible(false)}
+        />
+      )}
     </div>
   );
 }
