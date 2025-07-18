@@ -39,7 +39,7 @@ export default function LoginPage() {
     if (data.status) {
       Cookies.set("token", data.data.token, { path: "/" });
       Cookies.set("name", data.data.name, { path: "/" });
-      setToastMessage(data.message || "Login successful!");
+      setToastMessage(data.message );
       setToastType("success");
       setIsToastVisible(true);
       setTimeout(() => {
@@ -47,7 +47,7 @@ export default function LoginPage() {
       }, 1500);
     } else {
       setError(data.message || "Login failed");
-      setToastMessage(data.message || "Login failed. Invalid credentials.");
+      setToastMessage(data.message );
       setToastType("error");
       setIsToastVisible(true);
     }
