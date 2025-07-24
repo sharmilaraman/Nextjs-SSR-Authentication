@@ -16,7 +16,7 @@ const Toast: React.FC<ToastProps> = ({ message, type, onClose }) => {
 
   return (
     <div
-      className="fixed w-auto text-white h-auto top-5 right-5 px-4 py-2 rounded shadow transition-all z-50 bg-[#6F6F77] flex items-center"
+      className="fixed w-auto text-white h-auto top-15 right-5 px-4 py-2 rounded shadow transition-all z-50 bg-[#6F6F77] flex items-center"
     >
       {type === "success" ? (
         <CircleCheck  className="h-5 w-5 rounded-full bg-green-400 mr-2" />
