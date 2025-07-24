@@ -11,8 +11,7 @@ if (!token) {
   }
  return (
     <div>
-      Welcome to my Next js App using SSR Authentication
-      <Image alt="Banner" src="/images/Banner.png" width={100} height={300} />
+      
     </div>
   );
 }
