@@ -6,6 +6,7 @@ export default async function HomePage() {
   const allCookies = cookieStore.getAll();
   console.log(allCookies);
   const token = cookieStore.get("token")?.value;
+  console.log(token);
 if (!token) {
     redirect("/login");
   }
